@@ -44,7 +44,11 @@ table {
 /****************************************
 * ヘッダー
 *****************************************/
+
 .header_inner {
+    position: fixed;
+    width: 100%;
+    z-index: 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -53,6 +57,169 @@ table {
 .header_logo {
     padding: 20px 35px;
 }
+/* ハンバーガーメニュー */
+/*==================================================
+　5-2-7 3本線が奥行きを持って回転して×に
+===================================*/
+
+/*ボタン外側※レイアウトによってpositionや形状は適宜変更してください*/
+.openbtn7{
+    position: fixed;/*ボタン内側の基点となるためrelativeを指定*/
+    z-index: 9999;
+    cursor: pointer;
+    width: 50px;
+    height:50px;
+    border-radius: 5px;
+    margin-right: 35px;
+    top: 20px;
+    right: 10px;
+  }
+  
+  /*ボタン内側*/
+  
+  .openbtn7 .openbtn-area{
+      transition: all .4s;
+  }
+  
+  .openbtn7 span{
+      display: inline-block;
+      transition: all .4s;/*アニメーションの設定*/
+      position: absolute;
+      left: 14px;
+      height: 2px;
+      border-radius: 2px;
+    background: #000;
+      width: 60%;
+    }
+  
+  
+  .openbtn7 span:nth-of-type(1) {
+    top:15px; 
+  }
+  
+  .openbtn7 span:nth-of-type(2) {
+    top:23px;
+  }
+  
+  .openbtn7 span:nth-of-type(3) {
+    top:31px;
+  }
+  
+  /*activeクラスが付与されると
+  線と周りのエリアが回転して×になる*/
+  
+  .openbtn7.active .openbtn-area{
+    transform: rotateY(-360deg);
+  }
+  
+  .openbtn7.active span:nth-of-type(1) {
+      top: 18px;
+      left: 10px;
+      transform: translateY(6px) rotate(-135deg);
+      width: 60%;
+    background-color: #fff;
+
+  }
+  
+  .openbtn7.active span:nth-of-type(2) {
+    opacity: 0;
+    background-color: #fff;
+
+  }
+  
+  .openbtn7.active span:nth-of-type(3){
+      top: 30px;
+      left: 10px;
+      transform: translateY(-6px) rotate(135deg);
+      width: 60%;
+    background-color: #fff;
+  }
+
+/* チェックボックスは非表示 */
+#sidemenu {
+    display: none;
+}
+#modal:checked ~ .modal {
+    display: none;
+}
+#modal:checked ~ #window {
+    left: -100%;
+}
+/* モーダル上でクリックした時モーダルを非表示にする */
+#modal:checked ~ .modal {
+    display: none;
+}
+/* モーダル上でクリックした時サイドメニューをしまう */
+#modal:checked ~ #window {
+    left:-100%;
+    opacity: 0;
+}
+/* .switch:checked ~ #modal {
+    display: none;
+}
+.switch:checked ~ #sidemenu {
+    left: -100%;
+} */
+
+/* モーダル */
+.modal {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 500;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+/* クリックした時モーダルを表示 */
+#sidemenu:checked ~ .modal {
+    display: block;
+}
+/* 横からメニュー画面 */
+#window {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 25%;
+    height: 100vh;
+    background-color: #000;
+    opacity: 0;
+    transition: all 0.7s;
+    z-index:501;
+    padding: 50px 30px;
+}
+/* クリックした時横からメニュー画面を表示 */
+#sidemenu:checked ~ #window {
+    left: 0;
+    opacity: 1;
+}
+.window_contents {
+    margin-bottom: 50px;
+}
+.window_contents li {
+    padding: 20px 0px;
+    border-top: 1px solid #fff;
+
+}
+.window_contents a{
+    color: #fff;
+    position: relative;
+}
+.a_label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.window_contents li:nth-of-type(3) {
+    border-bottom: 1px solid #fff;
+}
+.sns_contents a{
+    color: #fff;
+    padding: 3px;
+}
+
 
 /****************************************
 * メイン
@@ -60,6 +227,7 @@ table {
 .fv {
     position: relative;
     overflow: hidden;
+    margin-bottom: 50px;
 }
 .video {
     position: absolute;
@@ -70,11 +238,12 @@ table {
     min-height: 100%;
 }
 .contents {
-    border: 3px solid red;
+    padding-bottom: 50px;
 }
 .contact {
     background-color: #121212;
     color: #ffffff;
+    padding:0;
 
 }
 .contents_title {
@@ -84,6 +253,9 @@ table {
     padding: 30px 0px;
 }
 /* ピックアップ(pick up) */
+.slider_img {
+    padding: 0 30px;
+}
 /* フィーチャー(feature) */
 .feature {
     padding: 30px;
@@ -95,14 +267,19 @@ table {
     gap: 30px;
 
 }
-.wrapper div {
-}
 .feature_item {
     box-shadow: 0 0 10px grey;
 }
 .feature_item_img {
     width: 100%;
     height: auto;
+    opacity : 0;
+    transform : translate(0, 30px);
+  transition: all 1500ms;
+}
+.feature_item_img.view {
+    opacity: 1;
+    transform : translate(0, 0px);
 }
 .item_des {
     padding: 20px;
@@ -117,6 +294,7 @@ table {
 .contact_box {
     display: flex;
     justify-content: center;
+    width: 100%;
     padding: 0px 30px 30px;
 }
 .contact_item {
@@ -137,16 +315,23 @@ table {
 .name_input,.mail_input {
     width: 100%;
     height: 45px;
+    background-color: #ffffff;
 }
 .message_input {
     width: 100%;
     height: 70px;
+    background-color: #ffffff;
+
 }
 .send_box {
     display: inline-block;
     position: relative;
     border: 1px solid #ffffff;
     padding: 10px 40px;
+}
+.send_box:hover {
+    background-color: #fff;
+    color: #000;
 }
 .send {
     position: absolute;
@@ -158,4 +343,36 @@ table {
 .copyright {
     text-align: center;
     font-size: 0.6px;
+}
+
+/****************************************
+* レスポンシブ対応
+*****************************************/
+@media screen and (max-width:600px) {
+    .openbtn7 {
+        right: -10px;
+    }
+    #window {
+        width: 75%;
+    }
+    .feature_item {
+        margin-bottom: 20px;
+    }
+    .wrapper {
+        display: block;
+    }    
+    .contact_box {
+        display: block;
+    }
+    .contact_item {
+        width: 100%;
+        padding:0;
+    }
+    .contact_des {
+        display: inline-block;
+        width: 100%;
+    }
+    .send_wrapper {
+        text-align: center;
+    }
 }
